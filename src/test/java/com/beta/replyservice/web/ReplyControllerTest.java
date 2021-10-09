@@ -19,6 +19,8 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @SpringBootTest
 public class ReplyControllerTest {
+	
+	private static final String REPLY_MESSAGE = "/v2/reply/{message}";
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -32,37 +34,37 @@ public class ReplyControllerTest {
 
 	@Test
 	public void testValidMessage() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "11-kbzw9ru")).andDo(print()).andExpect(status().isOk())
+		this.mockMvc.perform(get(REPLY_MESSAGE, "11-kbzw9ru")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().contentType("application/json")).andExpect(jsonPath("$.message").value("kbzw9ru"));
 	}
 
 	@Test
 	public void testEmptyRule() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "-kbzw9ru")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "-kbzw9ru")).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void testEmptyString() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "11-")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "11-")).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void testMessageWithNoHyphen() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "11kbzw9ru")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "11kbzw9ru")).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void testMessageWithOneRule() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "1-kbzw9ru")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "1-kbzw9ru")).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void testMessageWithExcessRules() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "121-kbzw9ru")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "121-kbzw9ru")).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void testMessageWithInvalidRule() throws Exception {
-		this.mockMvc.perform(get("/reply/{message}", "13-kbzw9ru")).andExpect(status().isBadRequest());
+		this.mockMvc.perform(get(REPLY_MESSAGE, "13-kbzw9ru")).andExpect(status().isBadRequest());
 	}
 }

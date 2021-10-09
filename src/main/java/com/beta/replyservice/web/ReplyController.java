@@ -27,15 +27,20 @@ public class ReplyController {
 	public ReplyMessage replying() {
 		return new ReplyMessage("Message is empty");
 	}
+	
+	@GetMapping("/reply/{message}")
+	public ReplyMessage reply(@PathVariable String message) {
+		return new ReplyMessage(message);
+	}
 
 	/**
-	 * Get Method to accept the message in required Format.
+	 * V2 Get Method to accept the message in required Format.
 	 * 
 	 * @param message
 	 * @return 200 OK with string after applying rules.
 	 */
-	@GetMapping("/reply/{message}")
-	public ResponseEntity<ReplyMessage> getMessage(@PathVariable 
+	@GetMapping("/v2/reply/{message}")
+	public ResponseEntity<ReplyMessage> v2Reply(@PathVariable 
 			@Pattern(regexp = MSG_PATTERN) String message) {
 		return new ResponseEntity<ReplyMessage>(replyService.process(message), HttpStatus.OK);
 	}
